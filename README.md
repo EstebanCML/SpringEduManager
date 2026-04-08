@@ -88,12 +88,28 @@ Ademas de lo habitual (conexion MySQL `spring.datasource.*`, `server.port`, JPA,
 
 | Propiedad | Uso |
 |-----------|-----|
-| `app.estudiantes.email-domain` | Dominio del correo institucional al crear estudiantes: se forma `username@<dominio>` (p. ej. `edu.cl`). |
+| `app.estudiantes.email-domain` | Dominio del correo institucional al crear estudiantes: `username@<dominio>` (detalle en [Alta de estudiante](#alta-de-estudiante-reglas-de-generacion)). |
 | `app.periodos.sistema` | Tipo de calendario institucional (`SEMESTRAL`, `TRIMESTRAL`, `CUATRIMESTRAL`, …). Debe coincidir con un valor existente en la tabla `semestres` (`term_system`); si no, el alta de curso puede fallar con error de periodo. |
 | `app.periodos.etiquetas` | Lista separada por **comas**; cada parte se recorta con `trim`. Son las opciones del desplegable de periodo academico al crear/editar curso. Debe haber **tantas etiquetas como periodos** use tu sistema (p. ej. dos si es semestral: `Primer semestre, Segundo semestre`). |
 
 Valores por defecto en codigo si omites alguna: dominio `edu.cl`; sistema `SEMESTRAL`; etiquetas `Primer semestre,Segundo semestre`.
 
-## Alta de estudiante (reglas)
-- Crea automaticamente: `usuarios` + `usuario_roles` (`ESTUDIANTE`) + `estudiantes`.
-- Genera `username`, correo institucional y `codigo_estudiante`.
+## Alta de estudiante (reglas de generacion)
+Al registrar un estudiante (web o API), en una sola transaccion se crean filas en `usuarios`, `usuario_roles` (rol `ESTUDIANTE`) y `estudiantes`. El operador define nombre, apellidos, sede, contrasena y opcionalmente correo **personal**; el sistema calcula lo siguiente:
+
+### Username (`usuarios.username`)
+- Se parte del **nombre**, **primer apellido** y **segundo apellido**.
+- Cada parte se **normaliza**: minusculas, sin tildes (`Normalizer` NFD) y **solo letras** (se eliminan espacios, guiones, numeros, etc.).
+- Regla base: **3 primeras letras del nombre** + **primer apellido completo** (ya normalizado) + **1 letra del segundo apellido**.
+- Si ese `username` ya existe: se prueba con **4 letras del nombre** + mismo esquema de apellidos; si aun asi hay colision, se añade un sufijo numerico `2`, `3`, `4`, ... hasta obtener uno libre.
+
+### Correo institucional (`usuarios.email`)
+- Siempre **`username@<dominio>`**, en minusculas.
+- El `<dominio>` es la propiedad **`app.estudiantes.email-domain`** (por defecto `edu.cl`); se recorta y se quita un `@` inicial si alguien lo escribio por error.
+- El correo **personal** opcional del formulario es otro campo (`email_personal`); no sustituye al institucional.
+
+### Codigo de estudiante (`estudiantes.codigo_estudiante`)
+- Formato **`STD-` + numero de 4 digitos** (`STD-0001`, `STD-0002`, ...). Se asigna el **primer codigo libre** en orden ascendente.
+
+### Sede
+- Debe ser una de las sedes definidas en la aplicacion (lista fija en codigo: Santiago Centro, Santiago Norte, Santiago Sur, Valparaiso, Concepcion).
