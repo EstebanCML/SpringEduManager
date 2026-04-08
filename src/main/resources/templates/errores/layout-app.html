@@ -1,0 +1,22 @@
+<!--
+  Shell común para páginas de sistema (error HTTP, acceso denegado, etc.).
+  Uso desde otra plantilla:
+  <html th:replace="~{errores/layout-app :: layout ('Título', ~{:: miFragmento})}">
+  <main th:fragment="miFragmento" class="...">...</main>
+  </html>
+-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout (pageTitle, mainBlock)" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${pageTitle}">SpringEduManager</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <th:block th:replace="${mainBlock}"></th:block>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Editar curso</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="container flex-grow-1 py-4 col-lg-8">
+        <h1 class="h4 mb-3">Editar curso</h1>
+        <div th:if="${successMessage}" class="alert alert-success py-2" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger py-2" th:text="${errorMessage}"></div>
+        <form th:action="@{'/cursos/' + ${cursoId}}" th:object="${cursoForm}" method="post" novalidate>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <label class="form-label" for="codigo">Código</label>
+                    <input id="codigo" class="form-control form-control-sm" th:classappend="${#fields.hasErrors('codigo')} ? ' is-invalid'" th:field="*{codigo}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="nombre">Nombre</label>
+                    <input id="nombre" class="form-control form-control-sm" th:classappend="${#fields.hasErrors('nombre')} ? ' is-invalid'" th:field="*{nombre}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                </div>
+                <div class="col-12">
+                    <label class="form-label" for="descripcion">Descripción</label>
+                    <textarea id="descripcion" class="form-control form-control-sm" rows="2" th:field="*{descripcion}"></textarea>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="profesorId">Profesor</label>
+                    <select id="profesorId" class="form-select form-select-sm" th:classappend="${#fields.hasErrors('profesorId')} ? ' is-invalid'" th:field="*{profesorId}">
+                        <option value="">Seleccione…</option>
+                        <option th:each="p : ${profesores}" th:value="${p.id}"
+                                th:text="|${p.usuario.nombre} ${p.usuario.primerApellido} — ${p.codigoProfesor}|">Profesor</option>
+                    </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('profesorId')}" th:errors="*{profesorId}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="periodoIndice">Periodo académico</label>
+                    <select id="periodoIndice" class="form-select form-select-sm" th:classappend="${#fields.hasErrors('periodoIndice')} ? ' is-invalid'" th:field="*{periodoIndice}">
+                        <option value="">Seleccione…</option>
+                        <option th:each="p, stat : ${periodos}" th:value="${stat.index}" th:text="${p}">Periodo</option>
+                    </select>
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('periodoIndice')}" th:errors="*{periodoIndice}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input id="anual" class="form-check-input" type="checkbox" th:field="*{anual}">
+                        <label class="form-check-label" for="anual">Curso anual (se puede tomar en cualquier periodo)</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="fechaInicio">Fecha inicio</label>
+                    <input id="fechaInicio" type="date" class="form-control form-control-sm" th:classappend="${#fields.hasErrors('fechaInicio')} ? ' is-invalid'" th:field="*{fechaInicio}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label" for="fechaFin">Fecha término</label>
+                    <input id="fechaFin" type="date" class="form-control form-control-sm" th:classappend="${#fields.hasErrors('fechaFin')} ? ' is-invalid'" th:field="*{fechaFin}">
+                    <div class="invalid-feedback" th:if="${#fields.hasErrors('fechaFin')}" th:errors="*{fechaFin}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input id="activo" class="form-check-input" type="checkbox" th:field="*{activo}">
+                        <label class="form-check-label" for="activo">Curso activo</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-primary btn-sm">Guardar cambios</button>
+                <a class="btn btn-outline-secondary btn-sm" th:href="@{/cursos}">Volver al listado</a>
+            </div>
+        </form>
+        <div class="mt-2 d-flex justify-content-end">
+            <form th:action="@{'/cursos/' + ${cursoId} + '/eliminar'}" method="post"
+                  data-confirm-delete="true" data-confirm-message="¿Seguro que quieres borrar este curso?">
+                <button type="submit" class="btn btn-sm btn-danger">Borrar curso</button>
+            </form>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+    <script>
+        (() => {
+            const anual = document.getElementById('anual');
+            const periodo = document.getElementById('periodoIndice');
+            if (!anual || !periodo) return;
+            const syncPeriodo = () => { periodo.disabled = anual.checked; };
+            anual.addEventListener('change', syncPeriodo);
+            syncPeriodo();
+        })();
+    </script>
+</body>
+</html>

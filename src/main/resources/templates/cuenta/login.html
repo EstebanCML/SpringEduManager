@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar sesión</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+    <style>
+        .form-signin {
+            max-width: 360px;
+            padding: 1rem;
+        }
+        .form-signin .form-floating:focus-within {
+            z-index: 2;
+        }
+        .form-signin input[name="username"] {
+            margin-bottom: -1px;
+            border-bottom-right-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .form-signin input[name="password"] {
+            margin-bottom: 10px;
+            border-top-left-radius: 0;
+            border-top-right-radius: 0;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="container flex-grow-1 d-flex align-items-center justify-content-center py-4">
+        <section class="form-signin w-100 text-center">
+            <h1 class="h4 mb-3 fw-normal">Iniciar sesión</h1>
+            <div th:if="${param.logout}" class="alert alert-info py-2">Sesión cerrada.</div>
+            <div th:if="${param.auth}" class="alert alert-secondary py-2">Debes iniciar sesión para continuar.</div>
+            <div th:if="${param.expired}" class="alert alert-warning py-2">Tu sesión expiró. Inicia sesión nuevamente.</div>
+            <div th:if="${param.error}" class="alert alert-danger py-2">Usuario o contraseña incorrectos.</div>
+
+            <form th:action="@{/login}" method="post">
+                <div class="form-floating">
+                    <input type="text" class="form-control" id="username" name="username" placeholder="usuario"
+                           autocomplete="username" required autofocus>
+                    <label for="username">Usuario</label>
+                </div>
+                <div class="form-floating">
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Contraseña"
+                           autocomplete="current-password" required>
+                    <label for="password">Contraseña</label>
+                </div>
+                <div class="form-check text-start mb-3">
+                    <input class="form-check-input" type="checkbox" value="true" id="remember-me" name="remember-me">
+                    <label class="form-check-label" for="remember-me">Recordarme por 7 días</label>
+                </div>
+                <button type="submit" class="btn btn-primary w-100 py-2">Entrar</button>
+            </form>
+
+            <p class="text-body-secondary mt-3 mb-0">
+                <a th:href="@{/}" class="link-secondary">← Volver al inicio</a>
+            </p>
+        </section>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

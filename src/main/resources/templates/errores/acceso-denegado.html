@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{errores/layout-app :: layout ('Acceso denegado', ~{:: mainAccesoDenegado})}">
+<head><meta charset="UTF-8"></head>
+<body>
+<main th:fragment="mainAccesoDenegado" class="container flex-grow-1 py-4 col-lg-7">
+    <h1 class="h3 mb-3">Acceso denegado</h1>
+    <div class="alert alert-warning">
+        No tienes permisos para acceder a esta sección.
+    </div>
+    <div class="alert alert-info py-2">
+        Si necesitas acceso, contacta al administrador e indica la ruta que intentaste abrir.
+    </div>
+    <p class="text-secondary">Si crees que es un error, solicita al administrador la asignación del rol correspondiente.</p>
+    <div class="d-flex gap-2 mt-3">
+        <a class="btn btn-outline-secondary btn-sm" th:href="@{/}">Ir al inicio</a>
+        <a class="btn btn-outline-light btn-sm" th:href="@{/perfil}">Mi perfil</a>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi agenda académica</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container flex-grow-1 py-4">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="h3 mb-0">Mi agenda académica</h1>
+        <a class="btn btn-outline-secondary btn-sm" th:href="@{/mis-notas}">Volver a Mis notas</a>
+    </div>
+    <div class="alert alert-info py-2 small">
+        Aquí puedes revisar fechas y notas de cada práctica y evaluación programada.
+    </div>
+
+    <section class="card bg-dark border-secondary mb-4">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Prácticas</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Práctica</th>
+                        <th>Fecha inicio</th>
+                        <th>Fecha entrega</th>
+                        <th>Estado</th>
+                        <th>Nota</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(practicas)}">
+                        <td colspan="6" class="text-secondary">No tienes prácticas registradas.</td>
+                    </tr>
+                    <tr th:each="p : ${practicas}">
+                        <td th:text="${p.practica.curso.codigo + ' - ' + p.practica.curso.nombre}">Curso</td>
+                        <td th:text="${p.practica.nombre}">Práctica</td>
+                        <td th:text="${p.practica.fechaInicio}">2026-01-01</td>
+                        <td th:text="${p.practica.fechaEntrega}">2026-01-15</td>
+                        <td th:text="${p.estado}">REVISADA</td>
+                        <td th:text="${p.nota != null ? p.nota : 'Pendiente'}">Pendiente</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="card bg-dark border-secondary mb-2">
+        <div class="card-body">
+            <h2 class="h5 mb-3">Evaluaciones</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm align-middle mb-0">
+                    <thead>
+                    <tr>
+                        <th>Curso</th>
+                        <th>Tipo</th>
+                        <th>Nombre</th>
+                        <th>Fecha evaluación</th>
+                        <th>Nota</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:if="${#lists.isEmpty(evaluaciones)}">
+                        <td colspan="5" class="text-secondary">No tienes evaluaciones registradas.</td>
+                    </tr>
+                    <tr th:each="e : ${evaluaciones}">
+                        <td th:text="${e.curso.codigo + ' - ' + e.curso.nombre}">Curso</td>
+                        <td th:text="${e.tipo}">EVALUACION</td>
+                        <td th:text="${e.nombre}">Nombre</td>
+                        <td th:text="${e.fechaEvaluacion}">2026-01-20</td>
+                        <td th:text="${e.nota}">5.80</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

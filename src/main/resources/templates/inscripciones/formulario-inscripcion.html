@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${inscripcion != null} ? 'Editar inscripción' : 'Nueva inscripción'">Inscripción</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+    <style>
+        .form-inscripcion {
+            max-width: 560px;
+            padding: 1rem;
+        }
+        .form-inscripcion .form-floating:focus-within {
+            z-index: 2;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container flex-grow-1 d-flex align-items-center justify-content-center py-4">
+    <section class="form-inscripcion w-100">
+        <h1 class="h4 mb-3 text-center" th:text="${inscripcion != null} ? 'Editar inscripción' : 'Nueva inscripción'">Nueva inscripción</h1>
+        <p class="text-body-secondary text-center mb-3" th:if="${inscripcion == null}">
+            Asocia un estudiante con un curso y define la fecha y el estado de la inscripción.
+        </p>
+        <p class="text-body-secondary text-center mb-3" th:if="${inscripcion != null}">
+            Puedes actualizar la fecha y el estado. El estudiante y el curso no se modifican.
+        </p>
+        <div th:if="${errorMessage}" class="alert alert-danger py-2" th:text="${errorMessage}"></div>
+        <div class="alert alert-info py-2 mb-3" th:if="${inscripcion == null}">
+            Elige <strong>estudiante</strong> y <strong>curso</strong> antes de guardar; luego podrás cargar prácticas y evaluaciones sobre esa inscripción.
+        </div>
+        <div class="alert alert-info py-2 mb-3" th:if="${inscripcion != null}">
+            Los campos <strong>estudiante</strong> y <strong>curso</strong> quedan fijos para no romper el historial académico.
+        </div>
+
+        <form th:action="${inscripcion != null} ? @{'/inscripciones/' + ${inscripcion.id}} : @{/inscripciones}"
+              th:object="${inscripcionForm}" method="post" novalidate>
+            <div class="row g-2">
+                <div class="col-12">
+                    <div class="form-floating">
+                        <select id="estudianteId" class="form-select" th:field="*{estudianteId}" th:disabled="${inscripcion != null}"
+                                th:classappend="${#fields.hasErrors('estudianteId')} ? ' is-invalid'">
+                            <option value="">Seleccionar</option>
+                            <option th:each="e : ${estudiantes}" th:value="${e.id}" th:text="${e.codigoEstudiante + ' - ' + e.usuario.nombre + ' ' + e.usuario.primerApellido}"></option>
+                        </select>
+                        <label for="estudianteId">Estudiante</label>
+                    </div>
+                    <input th:if="${inscripcion != null}" type="hidden" th:field="*{estudianteId}">
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('estudianteId')}" th:errors="*{estudianteId}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <select id="cursoId" class="form-select" th:field="*{cursoId}" th:disabled="${inscripcion != null}"
+                                th:classappend="${#fields.hasErrors('cursoId')} ? ' is-invalid'">
+                            <option value="">Seleccionar</option>
+                            <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.codigo + ' - ' + c.nombre}"></option>
+                        </select>
+                        <label for="cursoId">Curso</label>
+                    </div>
+                    <input th:if="${inscripcion != null}" type="hidden" th:field="*{cursoId}">
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('cursoId')}" th:errors="*{cursoId}"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input id="fechaInscripcion" type="date" class="form-control" placeholder=" "
+                               th:classappend="${#fields.hasErrors('fechaInscripcion')} ? ' is-invalid'"
+                               th:field="*{fechaInscripcion}">
+                        <label for="fechaInscripcion">Fecha de inscripción</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('fechaInscripcion')}" th:errors="*{fechaInscripcion}"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <select id="estado" class="form-select" th:field="*{estado}"
+                                th:classappend="${#fields.hasErrors('estado')} ? ' is-invalid'">
+                            <option th:each="estado : ${estadosInscripcion}" th:value="${estado}" th:text="${estado}"></option>
+                        </select>
+                        <label for="estado">Estado</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
+                </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-success w-100">Guardar inscripción</button>
+            </div>
+            <div class="text-center mt-3">
+                <a class="link-secondary" th:href="@{/inscripciones}">← Volver al listado</a>
+            </div>
+        </form>
+    </section>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${practica != null} ? 'Editar práctica' : 'Nueva práctica'">Práctica</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+    <style>
+        .form-practica {
+            max-width: 560px;
+            padding: 1rem;
+        }
+        .form-practica .form-floating:focus-within {
+            z-index: 2;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container flex-grow-1 d-flex align-items-center justify-content-center py-4">
+    <section class="form-practica w-100">
+        <h1 class="h4 mb-3 text-center" th:text="${practica != null} ? 'Editar práctica' : 'Nueva práctica'">Nueva práctica</h1>
+        <p class="text-body-secondary text-center mb-3" th:if="${practica == null}">
+            Define el curso, nombre y fechas de la práctica. Las notas por estudiante se cargan después en <strong>Calificar</strong>.
+        </p>
+        <p class="text-body-secondary text-center mb-3" th:if="${practica != null}">
+            Puedes ajustar datos y fechas. El <strong>curso</strong> no cambia para no desordenar calificaciones ya cargadas.
+        </p>
+        <div class="alert alert-info py-2 mb-3">
+            La nota de cada estudiante se gestiona desde <strong>Prácticas → Calificar</strong>, no en este formulario.
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger py-2" th:text="${errorMessage}"></div>
+
+        <form th:action="${practica != null} ? @{'/practicas/' + ${practica.id}} : @{/practicas}" th:object="${practicaForm}" method="post" novalidate>
+            <div class="row g-2">
+                <div class="col-12">
+                    <div class="form-floating">
+                        <select id="cursoId" class="form-select" th:field="*{cursoId}" th:disabled="${practica != null}"
+                                th:classappend="${#fields.hasErrors('cursoId')} ? ' is-invalid'">
+                            <option value="">Seleccionar</option>
+                            <option th:each="c : ${cursos}" th:value="${c.id}" th:text="${c.codigo + ' - ' + c.nombre}"></option>
+                        </select>
+                        <label for="cursoId">Curso</label>
+                    </div>
+                    <input th:if="${practica != null}" type="hidden" th:field="*{cursoId}">
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('cursoId')}" th:errors="*{cursoId}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <input id="nombre" class="form-control" placeholder="Nombre de la práctica"
+                               th:classappend="${#fields.hasErrors('nombre')} ? ' is-invalid'"
+                               th:field="*{nombre}">
+                        <label for="nombre">Nombre</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea id="descripcion" class="form-control" placeholder="Descripción" style="height: 5.5rem"
+                                  th:classappend="${#fields.hasErrors('descripcion')} ? ' is-invalid'"
+                                  th:field="*{descripcion}"></textarea>
+                        <label for="descripcion">Descripción</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('descripcion')}" th:errors="*{descripcion}"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input id="fechaInicio" type="date" class="form-control" placeholder=" "
+                               th:classappend="${#fields.hasErrors('fechaInicio')} ? ' is-invalid'"
+                               th:field="*{fechaInicio}">
+                        <label for="fechaInicio">Fecha inicio</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <input id="fechaEntrega" type="date" class="form-control" placeholder=" "
+                               th:classappend="${#fields.hasErrors('fechaEntrega')} ? ' is-invalid'"
+                               th:field="*{fechaEntrega}">
+                        <label for="fechaEntrega">Fecha entrega</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('fechaEntrega')}" th:errors="*{fechaEntrega}"></div>
+                </div>
+                <div class="col-md-4">
+                    <div class="form-floating">
+                        <select id="estado" class="form-select" th:field="*{estado}"
+                                th:classappend="${#fields.hasErrors('estado')} ? ' is-invalid'">
+                            <option th:each="estado : ${estadosPractica}" th:value="${estado}" th:text="${estado}"></option>
+                        </select>
+                        <label for="estado">Estado</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('estado')}" th:errors="*{estado}"></div>
+                </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-success w-100" th:text="${practica != null} ? 'Guardar cambios' : 'Guardar práctica'">Guardar práctica</button>
+            </div>
+            <div class="text-center mt-3">
+                <a class="link-secondary" th:href="@{/practicas}">← Volver al listado</a>
+            </div>
+        </form>
+    </section>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

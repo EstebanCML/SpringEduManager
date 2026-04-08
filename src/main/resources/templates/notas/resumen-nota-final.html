@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resumen de notas</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container flex-grow-1 py-4 col-lg-7">
+    <h1 class="h4 mb-3">Resumen de cierre</h1>
+    <div class="card bg-dark border-secondary">
+        <div class="card-body">
+            <p class="mb-1"><strong>Estudiante:</strong> <span th:text="${inscripcion.estudiante.codigoEstudiante + ' - ' + inscripcion.estudiante.usuario.nombre + ' ' + inscripcion.estudiante.usuario.primerApellido}"></span></p>
+            <p class="mb-3"><strong>Curso:</strong> <span th:text="${inscripcion.curso.codigo + ' - ' + inscripcion.curso.nombre}"></span></p>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <div class="border rounded p-2">Promedio prácticas: <strong th:text="${resumen.promedioPractica}">0.00</strong></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="border rounded p-2">Promedio evaluaciones: <strong th:text="${resumen.promedioEvaluacion}">0.00</strong></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="border rounded p-2">Examen final: <strong th:text="${resumen.notaExamenFinal}">0.00</strong></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="border rounded p-2">Nota final semestre: <strong th:text="${resumen.notaFinalSemestre}">0.00</strong></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mt-3 d-flex gap-2">
+        <form th:action="@{'/notas-finales/inscripcion/' + ${inscripcion.id} + '/cerrar'}" method="post">
+            <button type="submit" class="btn btn-primary btn-sm">Cerrar semestre</button>
+        </form>
+        <a class="btn btn-outline-secondary btn-sm" th:href="@{/inscripciones}">Volver</a>
+    </div>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

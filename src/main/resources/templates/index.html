@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring Edu Manager</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="container flex-grow-1 d-flex align-items-center justify-content-center py-4">
+        <section class="text-center col-lg-8">
+            <h1 class="display-6 fw-bold mb-3">SpringEduManager</h1>
+            <p class="lead text-secondary mb-4">
+                Plataforma interna para gestionar cursos, practicas, evaluaciones e historial de notas en un solo lugar.
+            </p>
+
+            <div sec:authorize="isAnonymous()">
+                <a class="btn btn-success btn-lg" th:href="@{/login}">Iniciar sesion</a>
+                <p class="small text-secondary mt-3 mb-0">
+                    Si ya tienes cuenta, entra para acceder a tu panel segun tu rol.
+                </p>
+            </div>
+
+            <div sec:authorize="isAuthenticated()">
+                <p class="mb-3">
+                    Sesion activa como <strong sec:authentication="name">usuario</strong>.
+                </p>
+                <a class="btn btn-primary btn-lg" th:href="@{/home}">Ir al panel principal</a>
+            </div>
+        </section>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

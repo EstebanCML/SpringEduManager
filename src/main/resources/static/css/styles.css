@@ -1,0 +1,73 @@
+/*
+ * Compensa el navbar fixed-top para evitar que tape el contenido.
+ * Se aplica en el <body> de las vistas principales.
+ */
+ .layout-navbar-offset {
+    padding-top: 74px;
+}
+
+/*
+ * /mis-notas: columnas alineadas entre thead y tbody (evita que el ancho dependa solo del contenido).
+ */
+.tabla-mis-notas {
+    table-layout: fixed;
+    width: 100%;
+}
+.tabla-mis-notas thead th {
+    border-bottom-width: 1px;
+}
+.tabla-mis-notas th,
+.tabla-mis-notas td {
+    vertical-align: middle;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+.tabla-mis-notas--practicas th:nth-child(1),
+.tabla-mis-notas--practicas td:nth-child(1) {
+    width: 52%;
+}
+.tabla-mis-notas--practicas th:nth-child(2),
+.tabla-mis-notas--practicas td:nth-child(2) {
+    width: 24%;
+}
+.tabla-mis-notas--practicas th:nth-child(3),
+.tabla-mis-notas--practicas td:nth-child(3) {
+    width: 24%;
+}
+.tabla-mis-notas--evaluaciones th:nth-child(1),
+.tabla-mis-notas--evaluaciones td:nth-child(1) {
+    width: 18%;
+}
+.tabla-mis-notas--evaluaciones th:nth-child(2),
+.tabla-mis-notas--evaluaciones td:nth-child(2) {
+    width: 38%;
+}
+.tabla-mis-notas--evaluaciones th:nth-child(3),
+.tabla-mis-notas--evaluaciones td:nth-child(3) {
+    width: 22%;
+}
+.tabla-mis-notas--evaluaciones th:nth-child(4),
+.tabla-mis-notas--evaluaciones td:nth-child(4) {
+    width: 22%;
+}
+.tabla-mis-notas--finales th:nth-child(1),
+.tabla-mis-notas--finales td:nth-child(1) {
+    width: 18%;
+}
+.tabla-mis-notas--finales th:nth-child(2),
+.tabla-mis-notas--finales td:nth-child(2) {
+    width: 18%;
+}
+.tabla-mis-notas--finales th:nth-child(3),
+.tabla-mis-notas--finales td:nth-child(3) {
+    width: 22%;
+}
+.tabla-mis-notas--finales th:nth-child(4),
+.tabla-mis-notas--finales td:nth-child(4) {
+    width: 42%;
+}
+.tabla-mis-notas .col-nota {
+    text-align: right;
+    white-space: nowrap;
+}
+

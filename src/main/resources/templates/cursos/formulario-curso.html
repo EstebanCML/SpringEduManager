@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nuevo curso</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+    <style>
+        .form-curso {
+            max-width: 560px;
+            padding: 1rem;
+        }
+        .form-curso .form-floating:focus-within {
+            z-index: 2;
+        }
+    </style>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+<div th:replace="~{fragments/navbar :: navbar}"></div>
+<main class="container flex-grow-1 d-flex align-items-center justify-content-center py-4">
+    <section class="form-curso w-100">
+        <h1 class="h4 mb-3 text-center">Registrar curso</h1>
+        <p class="text-body-secondary text-center mb-3">Alta de un curso con profesor, periodo y fechas del semestre.</p>
+        <div th:if="${errorMessage}" class="alert alert-danger py-2" th:text="${errorMessage}"></div>
+        <div class="alert alert-info py-2 mb-3">
+            Si marcas <strong>curso anual</strong>, el periodo académico queda deshabilitado hasta que lo desmarques.
+        </div>
+
+        <form th:action="@{/cursos}" th:object="${cursoForm}" method="post" novalidate>
+            <div class="row g-2">
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input id="codigo" class="form-control" placeholder="Código"
+                               th:classappend="${#fields.hasErrors('codigo')} ? ' is-invalid'"
+                               th:field="*{codigo}">
+                        <label for="codigo">Código</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('codigo')}" th:errors="*{codigo}"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input id="nombre" class="form-control" placeholder="Nombre"
+                               th:classappend="${#fields.hasErrors('nombre')} ? ' is-invalid'"
+                               th:field="*{nombre}">
+                        <label for="nombre">Nombre</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('nombre')}" th:errors="*{nombre}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <textarea id="descripcion" class="form-control" placeholder="Descripción" style="height: 5.5rem"
+                                  th:field="*{descripcion}"></textarea>
+                        <label for="descripcion">Descripción</label>
+                    </div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <select id="profesorId" class="form-select" th:field="*{profesorId}"
+                                th:classappend="${#fields.hasErrors('profesorId')} ? ' is-invalid'">
+                            <option value="">Seleccione…</option>
+                            <option th:each="p : ${profesores}" th:value="${p.id}"
+                                    th:text="|${p.usuario.nombre} ${p.usuario.primerApellido} — ${p.codigoProfesor}|">Profesor</option>
+                        </select>
+                        <label for="profesorId">Profesor</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('profesorId')}" th:errors="*{profesorId}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-floating">
+                        <select id="periodoIndice" class="form-select" th:field="*{periodoIndice}"
+                                th:classappend="${#fields.hasErrors('periodoIndice')} ? ' is-invalid'">
+                            <option value="">Seleccione…</option>
+                            <option th:each="p, stat : ${periodos}" th:value="${stat.index}" th:text="${p}">Periodo</option>
+                        </select>
+                        <label for="periodoIndice">Periodo académico</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('periodoIndice')}" th:errors="*{periodoIndice}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check mt-1">
+                        <input id="anual" class="form-check-input" type="checkbox" th:field="*{anual}">
+                        <label class="form-check-label" for="anual">Curso anual (se puede tomar en cualquier periodo)</label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input id="fechaInicio" type="date" class="form-control" placeholder=" "
+                               th:classappend="${#fields.hasErrors('fechaInicio')} ? ' is-invalid'"
+                               th:field="*{fechaInicio}">
+                        <label for="fechaInicio">Fecha inicio</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('fechaInicio')}" th:errors="*{fechaInicio}"></div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-floating">
+                        <input id="fechaFin" type="date" class="form-control" placeholder=" "
+                               th:classappend="${#fields.hasErrors('fechaFin')} ? ' is-invalid'"
+                               th:field="*{fechaFin}">
+                        <label for="fechaFin">Fecha término</label>
+                    </div>
+                    <div class="invalid-feedback d-block" th:if="${#fields.hasErrors('fechaFin')}" th:errors="*{fechaFin}"></div>
+                </div>
+                <div class="col-12">
+                    <div class="form-check">
+                        <input id="activo" class="form-check-input" type="checkbox" th:field="*{activo}">
+                        <label class="form-check-label" for="activo">Curso activo</label>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-3 d-flex gap-2">
+                <button type="submit" class="btn btn-success w-100">Guardar curso</button>
+            </div>
+            <div class="text-center mt-3">
+                <a class="link-secondary" th:href="@{/cursos}">← Volver al listado</a>
+            </div>
+        </form>
+    </section>
+</main>
+<div th:replace="~{fragments/footer :: footer}"></div>
+<th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+<script>
+    (() => {
+        const anual = document.getElementById('anual');
+        const periodo = document.getElementById('periodoIndice');
+        if (!anual || !periodo) return;
+        const syncPeriodo = () => {
+            periodo.disabled = anual.checked;
+        };
+        anual.addEventListener('change', syncPeriodo);
+        syncPeriodo();
+    })();
+</script>
+</body>
+</html>

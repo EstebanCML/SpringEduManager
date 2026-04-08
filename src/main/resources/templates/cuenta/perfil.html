@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="container flex-grow-1 py-4 col-lg-7">
+        <h1 class="h3 mb-3">Mi Perfil</h1>
+        <div th:if="${successMessage}" class="alert alert-success py-2" th:text="${successMessage}"></div>
+        <div th:if="${errorMessage}" class="alert alert-danger py-2" th:text="${errorMessage}"></div>
+        <div class="card bg-dark text-light border-secondary">
+            <div class="card-body">
+                <p class="mb-1"><strong>Nombre:</strong>
+                    <span th:text="${usuario.nombre}">Nombre</span>
+                    <span th:if="${usuario.segundoNombre != null}" th:text="' ' + ${usuario.segundoNombre}"></span>
+                    <span th:text="' ' + ${usuario.primerApellido} + ' ' + ${usuario.segundoApellido}">Apellidos</span>
+                </p>
+                <p class="mb-1"><strong>Usuario:</strong> <span th:text="${usuario.username}">usuario</span></p>
+                <p class="mb-1"><strong>Correo institucional:</strong> <span th:text="${usuario.email}">correo@dominio</span></p>
+                <p class="mb-0">
+                    <strong>Correo personal:</strong>
+                    <span th:text="${usuario.emailPersonal != null ? usuario.emailPersonal : 'No registrado'}">No registrado</span>
+                </p>
+            </div>
+        </div>
+        <div class="card bg-dark text-light border-secondary mt-3">
+            <div class="card-body">
+                <h2 class="h5">Editar datos personales</h2>
+                <form th:action="@{/perfil}" th:object="${perfilForm}" method="post" class="row g-2" novalidate>
+                    <div class="col-md-6">
+                        <label class="form-label" for="nombre">Nombre</label>
+                        <input id="nombre" class="form-control form-control-sm" th:field="*{nombre}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="segundoNombre">Segundo nombre</label>
+                        <input id="segundoNombre" class="form-control form-control-sm" th:field="*{segundoNombre}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="primerApellido">Primer apellido</label>
+                        <input id="primerApellido" class="form-control form-control-sm" th:field="*{primerApellido}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="segundoApellido">Segundo apellido</label>
+                        <input id="segundoApellido" class="form-control form-control-sm" th:field="*{segundoApellido}">
+                    </div>
+                    <div class="col-12">
+                        <label class="form-label" for="emailPersonal">Correo personal</label>
+                        <input id="emailPersonal" type="email" class="form-control form-control-sm" th:field="*{emailPersonal}">
+                    </div>
+                    <div class="col-12 mt-2">
+                        <button type="submit" class="btn btn-primary btn-sm">Guardar datos</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="card bg-dark text-light border-secondary mt-3">
+            <div class="card-body">
+                <h2 class="h5">Cambiar contraseña</h2>
+                <div th:if="${passwordError}" class="alert alert-danger py-2" th:text="${passwordError}"></div>
+                <form th:action="@{/perfil/password}" th:object="${passwordForm}" method="post" class="row g-2" novalidate>
+                    <div class="col-12">
+                        <label class="form-label" for="passwordActual">Contraseña actual</label>
+                        <input id="passwordActual" type="password" class="form-control form-control-sm" th:field="*{passwordActual}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="passwordNueva">Nueva contraseña</label>
+                        <input id="passwordNueva" type="password" class="form-control form-control-sm" th:field="*{passwordNueva}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label" for="confirmarPasswordNueva">Confirmar nueva contraseña</label>
+                        <input id="confirmarPasswordNueva" type="password" class="form-control form-control-sm" th:field="*{confirmarPasswordNueva}">
+                    </div>
+                    <div class="col-12 mt-2">
+                        <button type="submit" class="btn btn-outline-light btn-sm">Actualizar contraseña</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="mt-3">
+            <a class="btn btn-outline-secondary btn-sm" th:href="@{/}">Volver</a>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>

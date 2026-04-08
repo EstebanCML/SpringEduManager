@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <th:block th:replace="~{fragments/common-assets :: styles}"></th:block>
+</head>
+<body data-bs-theme="dark" class="d-flex flex-column min-vh-100 layout-navbar-offset">
+    <div th:replace="~{fragments/navbar :: navbar}"></div>
+    <main class="container flex-grow-1 py-4">
+        <div class="mb-4">
+            <h1 class="h3 mb-1">Panel principal</h1>
+            <p class="text-secondary mb-0">
+                Bienvenido, <strong sec:authentication="name">usuario</strong>. Accede rapido a los modulos principales.
+            </p>
+        </div>
+
+        <div class="row g-3">
+            <div class="col-md-6 col-lg-4" sec:authorize="hasAnyRole('ADMIN','PROFESOR','AYUDANTE','ESTUDIANTE')">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h6">Cursos</h2>
+                        <p class="small text-secondary flex-grow-1">Revisa la oferta academica y los cursos asignados.</p>
+                        <a class="btn btn-outline-light btn-sm" th:href="@{/cursos}">Ir a cursos</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4" sec:authorize="hasAnyRole('ADMIN','PROFESOR','AYUDANTE')">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h6">Inscripciones</h2>
+                        <p class="small text-secondary flex-grow-1">Gestiona matriculas y estados de inscripcion por curso.</p>
+                        <a class="btn btn-outline-light btn-sm" th:href="@{/inscripciones}">Ir a inscripciones</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4" sec:authorize="hasAnyRole('ADMIN','PROFESOR','AYUDANTE')">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h6">Practicas y evaluaciones</h2>
+                        <p class="small text-secondary flex-grow-1">Publica actividades, registra notas y consulta avance academico.</p>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-outline-light btn-sm" th:href="@{/practicas}">Practicas</a>
+                            <a class="btn btn-outline-light btn-sm" th:href="@{/evaluaciones}">Evaluaciones</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4" sec:authorize="hasRole('ADMIN')">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h6">Ponderaciones</h2>
+                        <p class="small text-secondary flex-grow-1">Define porcentajes globales para el calculo de nota final.</p>
+                        <a class="btn btn-outline-light btn-sm" th:href="@{/ponderaciones}">Configurar</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4" sec:authorize="hasAnyRole('ADMIN','PROFESOR','AYUDANTE')">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h6">Notas finales</h2>
+                        <p class="small text-secondary flex-grow-1">Revisa resumenes y cierre de semestre por inscripcion.</p>
+                        <a class="btn btn-outline-light btn-sm" th:href="@{/notas-finales}">Ver notas finales</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-4" sec:authorize="hasRole('ESTUDIANTE')">
+                <div class="card bg-dark border-secondary h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h2 class="h6">Mis notas</h2>
+                        <p class="small text-secondary flex-grow-1">Consulta tus notas por curso y agenda academica personal.</p>
+                        <div class="d-flex gap-2">
+                            <a class="btn btn-outline-light btn-sm" th:href="@{/mis-notas}">Mis notas</a>
+                            <a class="btn btn-outline-light btn-sm" th:href="@{/mis-eventos-notas}">Mis eventos</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+    <div th:replace="~{fragments/footer :: footer}"></div>
+    <th:block th:replace="~{fragments/common-assets :: scripts}"></th:block>
+</body>
+</html>
+
