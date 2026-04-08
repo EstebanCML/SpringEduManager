@@ -84,10 +84,11 @@ Contrasena de prueba para usuarios seed: `1234` (guardada como hash bcrypt en BD
 - Cliente externo: ejemplo en `docs/resttemplate-consumo-ejemplo.md`.
 
 ## Configuracion editable (`application.properties`)
-Ademas de lo habitual (conexion MySQL `spring.datasource.*`, `server.port`, JPA, Thymeleaf, Security), puedes ajustar:
+Ademas de lo habitual (`spring.datasource.username` / `password`, `server.port`, JPA, Thymeleaf, Security), puedes ajustar:
 
 | Propiedad | Uso |
 |-----------|-----|
+| `app.database.host`, `app.database.port`, `app.database.name` | Host, puerto y **nombre de la base MySQL**. La URL JDBC se arma como `jdbc:mysql://${host}:${port}/${name}?...` (zona horaria `America/Santiago`, `useSSL=false`, `allowPublicKeyRetrieval=true`). El nombre debe existir en el servidor y alinearse con `CREATE DATABASE` / `USE` de `schema.sql` si cargas el script tal cual. |
 | `app.estudiantes.email-domain` | Dominio del correo institucional al crear estudiantes: `username@<dominio>` (detalle en [Alta de estudiante](#alta-de-estudiante-reglas-de-generacion)). |
 | `app.periodos.sistema` | Tipo de calendario institucional (`SEMESTRAL`, `TRIMESTRAL`, `CUATRIMESTRAL`, …). Debe coincidir con un valor existente en la tabla `semestres` (`term_system`); si no, el alta de curso puede fallar con error de periodo. |
 | `app.periodos.etiquetas` | Lista separada por **comas**; cada parte se recorta con `trim`. Son las opciones del desplegable de periodo academico al crear/editar curso. Debe haber **tantas etiquetas como periodos** use tu sistema (p. ej. dos si es semestral: `Primer semestre, Segundo semestre`). |
